@@ -1,0 +1,1 @@
+﻿var mainModule = angular.module('ftms', ['ftms.controllers', 'ftms.Filters']);

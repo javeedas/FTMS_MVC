@@ -1,0 +1,204 @@
+﻿@model FTMS.Models.Employee
+
+@{
+    ViewBag.Title = "Index";
+}
+@*@section Scripts{
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/Custom/Mainmodule.js"></script>
+    <script src="~/Scripts/Custom/Employee.js"></script>
+        }*@
+<style>
+        .btn-space {
+            margin-left: -5%;
+            background-color: cornflowerblue;
+            font-size: large;
+        }
+    </style>
+    <h2>Index</h2>
+   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addMemberModal">Add Member</button>
+    <div ng-controller="empCtrl" ng-init="GetAllData()" class="divList">
+    <div>
+        <p class="divHead">List of Employee</p>
+        <div><input type="text" class="form-control" ng-model="SearchMember" placeholder="Search Member" /></div>
+        <div style="height:400px; overflow: auto; ">
+            <div style="height: 250px;">
+                <table class="table table-bordered table-hover" border="1">
+                    <thead>
+                        <tr>
+                            <th style="background-color: #f39c12;border-color:#f39c12">
+                                ID
+                            </th>
+                            <th style="background-color: #f39c12;border-color:#f39c12">
+                                Name
+                            </th>
+                            <th style="background-color: #f39c12;border-color:#f39c12">
+                                category
+                            </th>
+                            <th style="background-color: #f39c12;border-color:#f39c12">
+                                tool
+                            </th>
+                            <th style="background-color: #f39c12;border-color:#f39c12">Designation</th>
+                            <th style="background-color: #f39c12;border-color:#f39c12">Dob</th>
+                            <th style="background-color: #f39c12;border-color:#f39c12" colspan="2">
+                                Actions
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="Emp in employees | filter:SearchMember " style="background-color:white">
+                            <td>{{Emp.empId}}</td>
+                            <td>{{Emp.empName}}</td>
+                            <td>{{Emp.category}}</td>
+                            <td>{{Emp.tool}}</td>
+                            <td>{{Emp.designation}}</td>
+                            <td>{{Emp.dob |DateFilter | date:'dd, MMMM yyyy'}}</td>
+                            <td>
+                                @*<input type="button" class="btn btn-warning btn-group-sm" value="Update" ng-click="UpdateEmp(Emp)" />*@
+                                <a href="#" ng-click="UpdateEmp(Emp)"><u>Update</u></a>
+                                <a href="#" ng-click="DeleteEmp(Emp)"><u>Delete</u></a>
+                                @*<input type="button" class="btn btn-danger" value="Delete" ng-click="DeleteEmp(Emp)" />*@
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="form-horizontal" role="form">
+            <div class="container">
+                <div class="row">
+                    <h2>
+                        <span id="spn">Add New Employee</span>
+                    </h2>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Id:</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="inputId" placeholder="Id" ng-model="empId">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Name:</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="inputName" placeholder="Name" ng-model="empName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Category:</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="inputCategory" placeholder="Category" ng-model="category">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Tool:</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="inputTool" placeholder="Tool" ng-model="tool">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Designation:</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="inputDesignation" placeholder="Designation" ng-model="designation">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">DOB:</label>
+                            <div class="col-md-8">
+                                <input type="date" class="form-control" id="inputDob" name="inputDob" ng-model="dob"
+                                       placeholder="dd-MM-yyyy" min="1947-01-01" ng-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" />
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-lg-4">
+                        <input type="button" id="btnSave" class="btn btn-success" value="Submit" ng-click="InsertData()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Hidden("EmpID_")
+
+
+
+    <!-- Modal For Adding Team Member -->
+    <div id="addMemberModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">ADD MEMBER</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row main">
+                            <div class="main-login main-center">
+                                <h5>Member Addition</h5>
+                                
+                                <form id="AddMember" name="addMemberForm">
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.empId)
+                                        @Html.TextBoxFor(m => m.empId, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.empId, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.empName)
+                                        @Html.TextBoxFor(m => m.empName, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.empName, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.category)
+                                        @Html.TextBoxFor(m => m.category, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.category, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.tool)
+                                        @Html.TextBoxFor(m => m.tool, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.tool, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.designation)
+                                        @Html.TextBoxFor(m => m.designation, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.designation, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.dob)
+                                        @Html.TextBoxFor(m => m.dob, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.dob, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" id="btnAddMember" name="Add Member" value="Add Member" class="btn btn-success btn-lg btn-block login-button" ng-click="InsertData()" />
+                                    </div>
+
+                                </form>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

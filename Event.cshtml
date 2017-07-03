@@ -1,0 +1,195 @@
+﻿@model FTMS.Models.Event
+
+@{
+    ViewBag.Title = "Index";
+}
+<div ng-controller="eventCtrl" ng-init="GetEvents()">
+    <h2>Index</h2>
+
+       <div class="row">
+           <div class="col-md-4">
+               <div class="card">
+                   
+                   <div class="card-block">
+                       <h4 class="card-title">Create Event</h4>
+                       <p class="card-text">Create all events occured in project.</p>
+                       <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Create Event &raquo;</a>
+                   </div>
+               </div>
+           </div>
+           <div class="col-md-4">
+               <div class="card">
+                   <div class="card-block">
+                       <h4 class="card-title">Event List</h4>
+                       <p class="card-text">Find the details of all events in the project.</p>
+                       <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#eventListModal">Event List &raquo;</a>
+                   </div>
+               </div>
+           </div> 
+           <div class="col-md-4">
+               <div class="card">
+                   <div class="card-block">
+                       <h4 class="card-title">BirthDay List</h4>
+                       <p class="card-text">Find the details of birthdays of members in the project.</p>
+                       <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#birthDayListModal">Bithday List &raquo;</a>
+                   </div>
+               </div>
+           </div>
+       </div>
+       <div class="row" style="margin-top:100px">
+           <div class="col-md-4">
+               <div class="card">
+                   <div class="card-block">
+                       <h4 class="card-title">Aprove Events</h4>
+                       <p class="card-text">Approve or Reject Events(For Admin)</p>
+                       <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#birthDayListModal">EventStaus &raquo;</a>
+                   </div>
+               </div>
+           </div>
+           <div class="col-md-4">
+               <div class="card">
+                   <div class="card-block">
+                       <h4 class="card-title">Apriciation Details</h4>
+                       <p class="card-text">Employee Apriciation Details</p>
+                       <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#birthDayListModal">Apriciations &raquo;</a>
+                   </div>
+               </div>
+           </div>
+           <div class="col-md-4">
+               <div class="card">
+                   <div class="card-block">
+                       <h4 class="card-title">Comments</h4>
+                       <p class="card-text">Feedback and comments</p>
+                       <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#birthDayListModal">Comments &raquo;</a>
+                   </div>
+               </div>
+           </div>
+       </div>
+   
+    
+    
+    
+            <!-- Modal For Adding Event -->
+            <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">EventRegistration Form</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row main">
+                                    <div class="main-login main-center">
+                                        <h5>Event Creation</h5>
+                                        <form name="eventForm" novalidate>
+
+                                            <div class="form-group" ng-class="{'has-error':eventForm.ename.$invalid && !eventForm.ename.$pristine }">
+                                                <label for="name">Event Name</label>
+                                                <input type="text" class="form-control" name="ename" id="ename" placeholder="Event Name" ng-model="eName" ng-minlength="4" ng-maxlength="20" required>
+                                                <p ng-show="eventForm.ename.$invalid && !eventForm.ename.$pristine" class="help-block">eventname is required.</p>
+                                                <p ng-show="eventForm.ename.$error.minlength" class="help-block">eventname should be 4 characters</p>
+                                                <p ng-show="eventForm.ename.$error.maxlength" class="help-block">event name should not exceed 20 characters</p>
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error':eventForm.edate.$invalid && !eventForm.edate.$pristine}">
+                                                <label for="edate">Event Date</label>
+                                                <input type="date" class="form-control" id="edate" name="edate" ng-model="eDate"
+                                                       placeholder="dd-MM-yyyy" min="2013-01-01" ng-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" required />
+                                                <p ng-show="eventForm.edate.$invalid && !eventForm.edate.$pristine" class="help-block">event date is required</p>
+                                                <p ng-show="eventForm.edate.$error.pattern" class="help-block">invalid date</p>
+
+
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error':eventForm.ebudget.$invalid && !eventForm.ebudget.$pristine }">
+                                                <label for="ebudget">Budget</label>
+
+                                                <input type="number" class="form-control" name="ebudget" id="ebudget" placeholder="Budget" ng-model="eBudget" ng-pattern='/([0-10]*)$/' required />
+                                                <p ng-show="eventForm.ebudget.$invalid && !eventForm.ebudget.$pristine" class="help-block">Budget is required</p>
+                                                <p ng-show="eventForm.ebudget.$error.pattern">invalid amount</p>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" id="btnsubmiteForm" class="btn btn-success btn-lg btn-block login-button" ng-disabled="eventForm.$invalid" ng-click="createEvent()">RegistarEvent</button>
+                                            </div>
+                                            <p ng-show="eventCreated">Event registared successfully</p>
+                                            <p ng-show="eventNotCreated">Error occured in registering event</p>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal For list of Events-->
+            <div id="eventListModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Events</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group input-group">
+                                <input type="search" class="form-control" ng-model="eSearchText" placeholder="Search Event" />
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                            </div>
+                            
+                            <div style="height:400px; overflow: auto; ">
+                                <div style="height: 250px;">
+                                    <table class="table table-bordered table-hover" border="1">
+                                        <thead>
+                                            <tr>
+                                                <th ng-click="sortColumn(Id)" ng-class="sortClass(Id)" style="background-color: #f39c12;border-color:#f39c12">Id</th>
+                                                <th ng-click="sortColumn(Name)" ng-class="sortClass(Name)" style="background-color: #f39c12;border-color:#f39c12">Name</th>
+                                                <th ng-click="sortColumn(Date)" ng-class="sortClass(Date)" style="background-color: #f39c12;border-color:#f39c12">Date</th>
+                                                <th ng-click="sortColumn(Budget)" ng-class="sortClass(Budget)" style="background-color: #f39c12;border-color:#f39c12">Budget</th>
+                                                <th ng-click="sortColumn(Status)" ng-class="sortClass(Status)" style="background-color: #f39c12;border-color:#f39c12">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="Event in events | filter : eSearchText | orderBy : events :reverse">
+                                                <td>{{Event.eId}}</td>
+                                                <td>{{Event.eName}}</td>
+                                                <td>{{Event.eDate | DateFilter | date: 'dd, MMMM yyyy'}}</td>
+                                                <td>{{Event.eBudget | currency}} </td>
+                                                <td>{{Event.eStatus}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <!--Modal For list of BirthDays-->
+            <div id="birthDayListModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4  class="modal-title">BirthDays</h4>
+                        </div>
+                        <div class="modal-body"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+
+
+
+

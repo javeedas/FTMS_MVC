@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewBag.Title = "TeamDetails";
+}
+
+<h2>TeamDetails</h2>
+@if (TempData["Success"] != null)
+{
+    <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+}
+@if (TempData["Failure"] != null)
+{
+    <p class="alert alert-danger" id="failureMessage">@TempData["Failure"]</p>
+}
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+        })
+        
+
+        var ConfirmDelete = function (EmployeeId) {
+            $('#hiddenempId').val(EmployeeId);
+            $('#mymodal').modal('show');
+        }
+
+        var DeleteEmployee = function () {
+            var empId = $('#hiddenempId').val();
+
+            $.ajax({
+                type: "POST",
+                url: "",
+                data: { EmployeeId: empId },
+                success: function (result) {
+                    $('#mymodal').hide();
+                    $('row_' + empId).remove();
+                }
+            })
+        }
+        
+    </script>
+    
+    }
+<p><a class="btn btn-primary" href="@Url.Action("AddMember","Team")">Add Member &raquo;</a></p>
+<div style="height:400px; overflow: auto; ">
+    <div style="height: 250px;">
+        <table  class="table table-striped" border="1">
+            <thead>
+                <tr>
+                   
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Tool</th>
+                    <th colspan="2">Actions</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var emp in ViewBag.Employees)
+                {
+                    <tr id="row_@emp.empId">
+                        <td>@emp.empId</td>
+                        <td>@emp.empName</td>
+                        <td>@emp.category</td>
+                        <td>@emp.tool</td>
+                        <td><a href="@Url.Action("Edit","Team")"><u>Edit</u></a>&nbsp;&nbsp;&nbsp;|
+                        @*@Html.ActionLink("Delete","Delete","Team",new { empID=@emp.empId},new { onclick="return confirm('Do u want to delete?');"})*@
+                        @*<a id="confirm" href="@Url.Action("Delete","Team",new {empID=@emp.empId})"><u>Delete</u></a>*@
+                        <a href="#" class="btn btn-danger" onclick="ConfirmDelete(@emp.empId)">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        
+
+        <input type="hidden" id="hiddenempId" />
+
+        <div class="modal fade" id="mymodal">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Delete Employee</h3>
+                </div>
+
+                <div class="modal-body">
+                    <h4>Do you want to Delete Employee?</h4>
+                </div>
+
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
+                    <a href="#" class="btn btn-success" onclick="DeleteEmployee()">Delete</a>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>

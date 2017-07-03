@@ -1,0 +1,54 @@
+﻿@model FTMS.Models.Employee
+
+@{
+    ViewBag.Title = "AddMember";
+}
+@section Scripts{
+    
+    <script type="text/javascript">
+    function resetfrm() {
+        document.getElementById("empid").value = "";
+        document.getElementById("empname").value= "";
+        document.getElementById("category").value = "";
+        document.getElementById("tool").value = "";
+        }
+  </script>
+    }
+
+<h2>AddMember</h2>
+
+@using (Html.BeginForm("Create", "Team", FormMethod.Post))
+{ 
+<form id="addmemberfrm">
+ <div class="form-horizontal" style="margin: 0 auto;width:500px">
+    @Html.ValidationSummary(true, null, new { @class = "text-danger" })
+    <div class="form-group Column">
+        @Html.LabelFor(Model => Model.empId)
+        @Html.TextBoxFor(Model => Model.empId, null, new {id="empid", @class = "form-control" })
+        @Html.ValidationMessageFor(Model => Model.empId, null, new { @class = "text-danger" })
+    </div>
+    <div class="form-group Column">
+        @Html.LabelFor(Model => Model.empName)
+        @Html.TextBoxFor(Model => Model.empName, null, new {id="empname", @class = "form-control" })
+        @Html.ValidationMessageFor(Model => Model.empName, null, new { @class = "text-danger" })
+    </div>
+    <div class="form-group Column">
+        @Html.LabelFor(Model => Model.category)
+        @Html.TextBoxFor(Model => Model.category, null, new {id="category", @class = "form-control" })
+        @Html.ValidationMessageFor(Model => Model.category, null, new { @class = "text-danger" })
+    </div>
+    <div class="form-group Column">
+        @Html.LabelFor(Model => Model.tool)
+        @Html.TextBoxFor(Model => Model.tool, null, new {id="tool", @class = "form-control" })
+        @Html.ValidationMessageFor(Model => Model.tool, null, new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <input class="btn btn-primary" type="submit" name="ADD" value="ADD" style="margin-left:80px">
+        <input id ="reset" class="btn btn-danger" type="button" name="RESET" value="RESET" onclick="resetfrm()">
+    </div>
+
+ </div>
+</form>
+}
+
+

@@ -1,0 +1,91 @@
+﻿@model FTMS.Models.fUser
+
+@{
+    ViewBag.Title = "AddUser";
+}
+
+<h2>Add User</h2>
+<div ng-controller="loginCtrl">
+    <form name="addUserForm" class="form-horizontal" novalidate>
+        <div class="container">
+            <div class="row">
+                <div class="form-group" ng-class="{'has-error':addUserForm.name.$invalid && !addUserForm.name.$pristine }">
+                    <label for="name" class="col-md-4 control-label">Name</label>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Name" ng-model="Name" ng-minlength="4" ng-maxlength="20" required>
+                        <p ng-show="addUserForm.name.$invalid && !addUserForm.name.$pristine" class="help-block">name is required.</p>
+                        <p ng-show="addUserForm.name.$error.minlength" class="help-block">name should be 4 characters</p>
+                        <p ng-show="addUserForm.name.$error.maxlength" class="help-block">name should not exceed 20 characters</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group" ng-class="{'has-error':addUserForm.username.$invalid && !addUserForm.username.$pristine }">
+                    <label for="username" class="col-md-4 control-label">UserName</label>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="username" id="username" placeholder="User Name" ng-model="userName" ng-minlength="4" ng-maxlength="20" required>
+                        <p ng-show="addUserForm.username.$invalid && !addUserForm.username.$pristine" class="help-block">username is required.</p>
+                        <p ng-show="addUserForm.username.$error.minlength" class="help-block">username should be 4 characters</p>
+                        <p ng-show="addUserForm.username.$error.maxlength" class="help-block">username should not exceed 20 characters</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group" ng-class="{'has-error':addUserForm.password.$invalid && !addUserForm.password.$pristine}">
+                    <label for="password" class="col-md-4 control-label">Password</label>
+                    <div class="col-md-4">
+                        <input type="password" class="form-control" name="password" id="password" placeholder="PassWord" ng-model="passWord" ng-minlength="4" ng-maxlength="10" required>
+                        <p ng-show="addUserForm.password.$invalid && !addUserForm.password.$pristine" class="help-block">password is required</p>
+                        <p ng-show="addUserForm.password.$error.minlength"  class="help-block">Password should be atleast 4 characters</p>
+                        <p ng-show="addUserForm.password.$error.maxlength"  class="help-block">Passowrd should not exceed 20 characters</p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="" class="col-md-4 control-label">Role:</label>
+                    <div class="col-md-4">
+                        <label class="radio-inline">
+                            <input type="radio" name="role" id="roleadmin" value="admin" ng-model="Admin" ng-required="admin !=''">Admin
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="role" id="roleuser" value="user" ng-model="User" ng-required="user != ''">User
+                        </label>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="" class="col-md-4 control-label">Tool</label>
+                    <div class="col-md-4">
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="dropdownmenu" aria-haspopup="true" aria-expanded="true">
+                                {{selectedTool}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownmenu">
+                                <li ng-repeat="tool in tools"><a ng-click="dropdownSelected(tool)">{{tool}}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-4 control-label"></label>
+                    <div class="col-md-4">
+                        <button type="submit" id="btnsubmiteForm" class="btn btn-success" ng-disabled="addUserForm.$invalid" ng-click="addUser()">Submit</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </form>
+    <div id="sucessmsg" class="alert alert-success" ng-show="successmsg">{{successmsg}}</div>
+    <div id="errormsg"  class="alert alert-danger"  ng-show="errormsg">{{errormsg}}</div>
+</div>
